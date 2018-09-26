@@ -1,0 +1,69 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.pushpal.bakingapp"
+        minSdkVersion 19
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+ext {
+    supportLibVersion = '27.1.1'
+    retrofitVersion = '2.4.0'
+    butterknifeVersion = '8.8.1'
+    exoPlayerVersion = 'r2.2.0'
+    roomVersion = '1.1.1'
+    espressoVersion = '3.0.2'
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+
+    // ButterKnife
+    implementation "com.jakewharton:butterknife:${butterknifeVersion}"
+    annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
+
+    // Retrofit, GSON
+    implementation 'com.google.code.gson:gson:2.8.4'
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
+
+    // Support Libraries
+    implementation "com.android.support:appcompat-v7:${supportLibVersion}"
+    implementation "com.android.support:recyclerview-v7:${supportLibVersion}"
+    implementation "com.android.support:cardview-v7:${supportLibVersion}"
+    implementation "com.android.support:support-v4:${supportLibVersion}"
+    implementation "com.android.support:design:${supportLibVersion}"
+
+    // ExoPlayer
+    implementation "com.google.android.exoplayer:exoplayer:${exoPlayerVersion}"
+
+    // Room - Database
+    implementation "android.arch.persistence.room:runtime:${roomVersion}"
+    annotationProcessor "android.arch.persistence.room:compiler:${roomVersion}"
+
+    // Espresso
+    implementation "com.android.support.test.espresso:espresso-idling-resource:${espressoVersion}"
+
+    // Testing-only dependencies
+    androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoVersion}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-intents:${espressoVersion}"
+    androidTestImplementation "com.android.support.test.espresso:espresso-contrib:${espressoVersion}"
+    androidTestImplementation "com.android.support:support-annotations:${supportLibVersion}"
+    androidTestImplementation 'com.android.support.test:rules:1.0.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    testImplementation 'junit:junit:4.12'
+}

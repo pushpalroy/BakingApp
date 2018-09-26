@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Baking App</string>
+    <string name="previous_step">Previous Step</string>
+    <string name="next_step">Next Step</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="add_to_widget">Add to widget</string>
+    <string name="widget_instruction">Go to a recipe and click on Add to widget.</string>
+</resources>
