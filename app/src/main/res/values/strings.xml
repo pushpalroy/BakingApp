@@ -5,4 +5,5 @@
     <string name="ingredients">Ingredients</string>
     <string name="add_to_widget">Add to widget</string>
     <string name="widget_instruction">Go to a recipe and click on Add to widget.</string>
+    <string name="thumbnail_image">Thumbnail Image</string>
 </resources>

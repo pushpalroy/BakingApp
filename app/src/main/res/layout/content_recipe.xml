@@ -19,11 +19,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="245dp" />
 
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/civ_recipe_thumbnail"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_below="@+id/playerView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="16dp"
+                app:civ_border_color="#FFFFFF"
+                app:civ_border_width="1dp" />
+
             <TextView
                 android:id="@+id/tv_description"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/playerView"
+                android:layout_below="@+id/civ_recipe_thumbnail"
                 android:gravity="center"
                 android:padding="16dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
