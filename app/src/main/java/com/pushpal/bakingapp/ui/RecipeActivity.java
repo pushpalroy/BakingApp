@@ -1,10 +1,12 @@
 package com.pushpal.bakingapp.ui;
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,6 +21,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -41,10 +45,14 @@ import com.pushpal.bakingapp.adapter.IngredientsAdapter;
 import com.pushpal.bakingapp.model.Ingredient;
 import com.pushpal.bakingapp.model.Step;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecipeActivity extends AppCompatActivity implements ExoPlayer.EventListener {
 
@@ -62,6 +70,8 @@ public class RecipeActivity extends AppCompatActivity implements ExoPlayer.Event
     public AppCompatButton nextBtn;
     @BindView(R.id.rv_ingredients)
     public RecyclerView mRecyclerView;
+    @BindView(R.id.civ_recipe_thumbnail)
+    CircleImageView recipeThumbnail;
     List<Step> steps = null;
     List<Ingredient> ingredients = null;
     Step currentStep = null;
@@ -190,10 +200,13 @@ public class RecipeActivity extends AppCompatActivity implements ExoPlayer.Event
             if (currentStep.getVideoURL() != null && !currentStep.getVideoURL().equals("")) {
                 initializeMediaSession();
                 initializePlayer(Uri.parse(currentStep.getVideoURL()));
-            } else if (currentStep.getThumbnailURL() != null && !currentStep.getThumbnailURL().equals("")) {
-                initializeMediaSession();
-                initializePlayer(Uri.parse(currentStep.getThumbnailURL()));
             }
+            if (currentStep.getThumbnailURL() != null && !currentStep.getThumbnailURL().equals(""))
+                new SetThumbnailTask()
+                        .execute(currentStep.getThumbnailURL());
+            else
+                recipeThumbnail.setVisibility(View.GONE);
+
 
             mRecyclerView.setVisibility(View.GONE);
             stepDescription.setVisibility(View.VISIBLE);
@@ -370,6 +383,48 @@ public class RecipeActivity extends AppCompatActivity implements ExoPlayer.Event
         @Override
         public void onSkipToPrevious() {
             mExoPlayer.seekTo(0);
+        }
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class SetThumbnailTask extends AsyncTask<String, Void, Boolean> {
+        String url;
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            URLConnection connection;
+            boolean isImage = false;
+            url = params[0];
+
+            // Logic to check whether the Thumbnail url is a valid image url
+            try {
+                connection = new URL(params[0]).openConnection();
+                if (connection != null) {
+                    String contentType = connection.getHeaderField("Content-Type");
+                    isImage = contentType.startsWith("image/");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return isImage;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean isImage) {
+            // Load the URL only if it is an image
+            if (isImage) {
+                recipeThumbnail.setVisibility(View.VISIBLE);
+                RequestOptions requestOptions = new RequestOptions()
+                        .centerCrop()
+                        .placeholder(R.drawable.logo)
+                        .error(R.drawable.logo);
+
+                Glide.with(RecipeActivity.this)
+                        .load(url)
+                        .apply(requestOptions)
+                        .into(recipeThumbnail);
+            } else
+                recipeThumbnail.setVisibility(View.GONE);
         }
     }
 }
