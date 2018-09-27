@@ -1,6 +1,8 @@
 package com.pushpal.bakingapp.ui;
 
 import android.app.FragmentManager;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +26,7 @@ import com.pushpal.bakingapp.database.RecipeIngredient;
 import com.pushpal.bakingapp.model.Ingredient;
 import com.pushpal.bakingapp.model.Recipe;
 import com.pushpal.bakingapp.model.Step;
+import com.pushpal.bakingapp.widget.RecipeWidgetProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -144,6 +147,7 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
                             @Override
                             public void run() {
                                 Toast.makeText(StepsActivity.this, "Recipe ingredients added to widget!", Toast.LENGTH_LONG).show();
+                                sendUpdateWidgetBroadcast();
                             }
                         });
                     } catch (SQLiteConstraintException e) {
@@ -153,6 +157,13 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
             });
         }
         return true;
+    }
+
+    private void sendUpdateWidgetBroadcast() {
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(StepsActivity.this);
+        int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
+        appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.list_view_ingredients);
+        RecipeWidgetProvider.updateWidgetListView(StepsActivity.this, appWidgetManager, appWidgetIds);
     }
 
     public List<String> getStepsList() {

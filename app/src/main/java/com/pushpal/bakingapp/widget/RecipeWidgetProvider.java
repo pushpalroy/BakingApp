@@ -16,34 +16,35 @@ import static com.pushpal.bakingapp.utilities.Constants.MyPREFERENCES;
 
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
-    private RemoteViews updateWidgetListView(Context context, int appWidgetId) {
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_recipe);
-        Intent intent = new Intent(context, RecipeWidgetService.class);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+    public static void updateWidgetListView(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_recipe);
+            Intent intent = new Intent(context, RecipeWidgetService.class);
+            intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+            intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-        SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        String recipe = sharedpreferences.getString("Recipe", "No Recipe Added");
-        remoteViews.setTextViewText(R.id.tv_label, recipe);
+            // Fetch Recipe Name from Shared Preferences
+            SharedPreferences sharedpreferences = context.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+            String recipe = sharedpreferences.getString("Recipe", "No Recipe Added");
+            remoteViews.setTextViewText(R.id.tv_label, recipe);
 
-        remoteViews.setRemoteAdapter(R.id.list_view_ingredients, intent);
-        remoteViews.setEmptyView(R.id.list_view_ingredients, R.id.tv_error);
+            remoteViews.setRemoteAdapter(R.id.list_view_ingredients, intent);
+            remoteViews.setEmptyView(R.id.list_view_ingredients, R.id.tv_error);
 
-        Intent recipeIntent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, recipeIntent, 0);
-        remoteViews.setOnClickPendingIntent(R.id.tv_label, pendingIntent);
-        return remoteViews;
+            // Set pending intent for onClick event on widget
+            Intent recipeIntent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, recipeIntent, 0);
+            remoteViews.setOnClickPendingIntent(R.id.tv_label, pendingIntent);
+
+            // Calling update app widget
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+        }
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-
-        // There may be multiple widgets active, so update all of them
-        for (int appWidgetId : appWidgetIds) {
-            RemoteViews remoteViews = updateWidgetListView(context, appWidgetId);
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-        }
+        updateWidgetListView(context, appWidgetManager, appWidgetIds);
     }
 
     @Override
