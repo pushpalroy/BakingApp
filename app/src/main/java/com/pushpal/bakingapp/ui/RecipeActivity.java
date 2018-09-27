@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.media.session.MediaButtonReceiver;
@@ -66,6 +67,7 @@ public class RecipeActivity extends AppCompatActivity implements ExoPlayer.Event
     Step currentStep = null;
     int position = -1;
     private SimpleExoPlayer mExoPlayer;
+    Long playerPosition = 0L;
     private PlaybackStateCompat.Builder mStateBuilder;
 
     @Override
@@ -81,12 +83,70 @@ public class RecipeActivity extends AppCompatActivity implements ExoPlayer.Event
             steps = bundle.getParcelableArrayList("Step");
             ingredients = bundle.getParcelableArrayList("Ingredients");
             position = bundle.getInt("Position");
-
-            setCurrentStep();
-            setButtonState();
         }
 
         setUpActionBar();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setCurrentStep();
+        setButtonState();
+
+        // Setting the Exo Player position
+        if (mExoPlayer != null)
+            mExoPlayer.seekTo(playerPosition);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Saving the current Exo Player position
+        if (mExoPlayer != null)
+            playerPosition = mExoPlayer.getCurrentPosition();
+
+        // Releasing player if API is less than 24
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            releasePlayer();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Saving the current step number
+        outState.putInt("step_position", position);
+
+        // Saving the current Exo Player position
+        if (mExoPlayer != null)
+            outState.putLong("player_position", mExoPlayer.getCurrentPosition());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restoring the step number
+        if (savedInstanceState.containsKey("step_position")) {
+            position = savedInstanceState.getInt("step_position");
+        }
+
+        // Restoring the Exo Player position
+        if (savedInstanceState.containsKey("player_position")) {
+            playerPosition = savedInstanceState.getLong("player_position");
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Releasing player if API is equal to or more than 24
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            releasePlayer();
     }
 
     public void onPreviousStep(View view) {
