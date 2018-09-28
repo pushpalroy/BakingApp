@@ -14,6 +14,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.pushpal.bakingapp.IdlingResource.SimpleIdlingResource;
 import com.pushpal.bakingapp.R;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity implements RecipeClickListen
     @BindView(R.id.recipe_recycler_view)
     public RecyclerView mRecyclerView;
     List<Recipe> mRecipesList;
+    @BindView(R.id.pb_loading_indicator)
+    public ProgressBar mLoadingIndicator;
 
     @Nullable
     private SimpleIdlingResource mIdlingResource;
@@ -176,11 +180,13 @@ public class MainActivity extends AppCompatActivity implements RecipeClickListen
                 mIdlingResource.setIdleState(false);
             }
 
+            mLoadingIndicator.setVisibility(View.VISIBLE);
             recipesList = new ArrayList<>();
         }
 
         @Override
         protected void onPostExecute(Void weatherData) {
+            mLoadingIndicator.setVisibility(View.INVISIBLE);
             onRecipesDownloaded(recipesList);
             if (mIdlingResource != null) {
                 mIdlingResource.setIdleState(true);

@@ -60,9 +60,6 @@ dependencies {
     // Circular ImageView
     implementation "de.hdodenhof:circleimageview:${civVersion}"
 
-    // ProgressBar
-    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.2'
-
     // Testing-only dependencies
     androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoVersion}"
     androidTestImplementation "com.android.support.test.espresso:espresso-intents:${espressoVersion}"
