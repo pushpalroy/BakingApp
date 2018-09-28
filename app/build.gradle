@@ -20,7 +20,6 @@ android {
 
 ext {
     supportLibVersion = '27.1.1'
-    retrofitVersion = '2.4.0'
     butterknifeVersion = '8.8.1'
     exoPlayerVersion = 'r2.2.0'
     roomVersion = '1.1.1'
@@ -37,11 +36,6 @@ dependencies {
     // ButterKnife
     implementation "com.jakewharton:butterknife:${butterknifeVersion}"
     annotationProcessor "com.jakewharton:butterknife-compiler:${butterknifeVersion}"
-
-    // Retrofit, GSON
-    implementation 'com.google.code.gson:gson:2.8.4'
-    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
-    implementation "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
 
     // Support Libraries
     implementation "com.android.support:appcompat-v7:${supportLibVersion}"
@@ -65,6 +59,9 @@ dependencies {
 
     // Circular ImageView
     implementation "de.hdodenhof:circleimageview:${civVersion}"
+
+    // ProgressBar
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.4.2'
 
     // Testing-only dependencies
     androidTestImplementation "com.android.support.test.espresso:espresso-core:${espressoVersion}"

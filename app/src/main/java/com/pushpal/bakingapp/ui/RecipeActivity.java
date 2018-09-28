@@ -76,8 +76,8 @@ public class RecipeActivity extends AppCompatActivity implements ExoPlayer.Event
     List<Ingredient> ingredients = null;
     Step currentStep = null;
     int position = -1;
-    private SimpleExoPlayer mExoPlayer;
     Long playerPosition = 0L;
+    private SimpleExoPlayer mExoPlayer;
     private PlaybackStateCompat.Builder mStateBuilder;
 
     @Override
