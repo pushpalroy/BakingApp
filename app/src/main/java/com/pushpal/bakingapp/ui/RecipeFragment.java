@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.media.session.MediaButtonReceiver;
@@ -54,6 +55,7 @@ public class RecipeFragment extends Fragment implements ExoPlayer.EventListener 
     RecyclerView mRecyclerView;
     MediaSessionCompat mMediaSession;
     PlaybackStateCompat.Builder mStateBuilder;
+    Long playerPosition = 0L;
 
     public RecipeFragment() {
     }
@@ -79,9 +81,89 @@ public class RecipeFragment extends Fragment implements ExoPlayer.EventListener 
     @Override
     public void onStart() {
         super.onStart();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Saving the current step number
+        outState.putInt("step_position", position);
+
+        // Saving the current Exo Player position
+        if (mExoPlayer != null)
+            outState.putLong("player_position", mExoPlayer.getCurrentPosition());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         // Start the operations to set the media and description
         setCurrentStep();
+
+        // Setting the Exo Player position
+        if (mExoPlayer != null)
+            mExoPlayer.seekTo(playerPosition);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Saving the current Exo Player position
+        if (mExoPlayer != null)
+            playerPosition = mExoPlayer.getCurrentPosition();
+
+        // Releasing player if API is less than 24
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N)
+            releasePlayer();
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            // Restoring the step number
+            if (savedInstanceState.containsKey("step_position")) {
+                position = savedInstanceState.getInt("step_position");
+            }
+
+            // Restoring the Exo Player position
+            if (savedInstanceState.containsKey("player_position")) {
+                playerPosition = savedInstanceState.getLong("player_position");
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Releasing player if API is equal to or more than 24
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            releasePlayer();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        releasePlayer();
+        if (mMediaSession != null)
+            mMediaSession.setActive(false);
+    }
+
+    @Override
+    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
+                    mExoPlayer.getCurrentPosition(), 1f);
+        } else if ((playbackState == ExoPlayer.STATE_READY)) {
+            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
+                    mExoPlayer.getCurrentPosition(), 1f);
+        }
+        mMediaSession.setPlaybackState(mStateBuilder.build());
     }
 
     public void setCurrentStep() {
@@ -199,26 +281,6 @@ public class RecipeFragment extends Fragment implements ExoPlayer.EventListener 
     @Override
     public void onLoadingChanged(boolean isLoading) {
 
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        releasePlayer();
-        if (mMediaSession != null)
-            mMediaSession.setActive(false);
-    }
-
-    @Override
-    public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
-                    mExoPlayer.getCurrentPosition(), 1f);
-        } else if ((playbackState == ExoPlayer.STATE_READY)) {
-            mStateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
-                    mExoPlayer.getCurrentPosition(), 1f);
-        }
-        mMediaSession.setPlaybackState(mStateBuilder.build());
     }
 
     @Override
