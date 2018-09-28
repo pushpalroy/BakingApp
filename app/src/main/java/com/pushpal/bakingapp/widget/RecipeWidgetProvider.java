@@ -16,7 +16,7 @@ import static com.pushpal.bakingapp.utilities.Constants.MyPREFERENCES;
 
 public class RecipeWidgetProvider extends AppWidgetProvider {
 
-    public static void updateWidgetListView(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    public static void updateWidget(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         for (int appWidgetId : appWidgetIds) {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget_recipe);
             Intent intent = new Intent(context, RecipeWidgetService.class);
@@ -44,7 +44,7 @@ public class RecipeWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        updateWidgetListView(context, appWidgetManager, appWidgetIds);
+        updateWidget(context, appWidgetManager, appWidgetIds);
     }
 
     @Override

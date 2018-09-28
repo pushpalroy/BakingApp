@@ -143,11 +143,12 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
                         editor.putString("Recipe", RecipeName);
                         editor.apply();
 
+                        sendUpdateWidgetBroadcast();
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(StepsActivity.this, "Recipe ingredients added to widget!", Toast.LENGTH_LONG).show();
-                                sendUpdateWidgetBroadcast();
                             }
                         });
                     } catch (SQLiteConstraintException e) {
@@ -163,7 +164,7 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(StepsActivity.this);
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.list_view_ingredients);
-        RecipeWidgetProvider.updateWidgetListView(StepsActivity.this, appWidgetManager, appWidgetIds);
+        RecipeWidgetProvider.updateWidget(StepsActivity.this, appWidgetManager, appWidgetIds);
     }
 
     public List<String> getStepsList() {

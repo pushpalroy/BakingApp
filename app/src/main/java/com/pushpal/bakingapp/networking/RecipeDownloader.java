@@ -21,6 +21,10 @@ public class RecipeDownloader {
     private static final String TAG = RecipeDownloader.class.getSimpleName();
     private static List<Recipe> mRecipesList = new ArrayList<>();
 
+    public interface DelayerCallback {
+        void onRecipesDownloaded(List<Recipe> mRecipesList);
+    }
+
     public static void downloadRecipes(final DelayerCallback callback,
                                        @Nullable final SimpleIdlingResource idlingResource) {
         if (idlingResource != null) {
@@ -59,9 +63,5 @@ public class RecipeDownloader {
                 Log.e(TAG, t.getMessage());
             }
         });
-    }
-
-    public interface DelayerCallback {
-        void onRecipesDownloaded(List<Recipe> mRecipesList);
     }
 }
