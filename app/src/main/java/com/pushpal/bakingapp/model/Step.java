@@ -3,8 +3,6 @@ package com.pushpal.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Step implements Parcelable {
     public static final Creator<Step> CREATOR = new Creator<Step>() {
         @Override
@@ -17,15 +15,10 @@ public class Step implements Parcelable {
             return new Step[size];
         }
     };
-    @SerializedName("id")
     private Integer id;
-    @SerializedName("shortDescription")
     private String shortDescription;
-    @SerializedName("description")
     private String description;
-    @SerializedName("videoURL")
     private String videoURL;
-    @SerializedName("thumbnailURL")
     private String thumbnailURL;
 
     private Step(Parcel in) {
@@ -38,6 +31,14 @@ public class Step implements Parcelable {
         description = in.readString();
         videoURL = in.readString();
         thumbnailURL = in.readString();
+    }
+
+    public Step(Integer id, String shortDescription, String description, String videoURL, String thumbnailURL) {
+        this.id = id;
+        this.shortDescription = shortDescription;
+        this.description = description;
+        this.videoURL = videoURL;
+        this.thumbnailURL = thumbnailURL;
     }
 
     public Integer getId() {

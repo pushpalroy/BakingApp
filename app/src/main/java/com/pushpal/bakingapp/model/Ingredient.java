@@ -3,8 +3,6 @@ package com.pushpal.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-
 public class Ingredient implements Parcelable {
     public static final Creator<Ingredient> CREATOR = new Creator<Ingredient>() {
         @Override
@@ -17,12 +15,15 @@ public class Ingredient implements Parcelable {
             return new Ingredient[size];
         }
     };
-    @SerializedName("quantity")
     private Double quantity;
-    @SerializedName("measure")
     private String measure;
-    @SerializedName("ingredient")
     private String ingredientName;
+
+    public Ingredient(Double quantity, String measure, String ingredientName) {
+        this.quantity = quantity;
+        this.measure = measure;
+        this.ingredientName = ingredientName;
+    }
 
     private Ingredient(Parcel in) {
         if (in.readByte() == 0) {

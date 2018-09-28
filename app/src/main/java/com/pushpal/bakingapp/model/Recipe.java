@@ -3,8 +3,6 @@ package com.pushpal.bakingapp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.ArrayList;
 
 public class Recipe implements Parcelable {
@@ -19,18 +17,15 @@ public class Recipe implements Parcelable {
             return new Recipe[size];
         }
     };
-    @SerializedName("id")
     private Integer id;
-    @SerializedName("name")
     private String name;
-    @SerializedName("ingredients")
     private ArrayList<Ingredient> ingredients;
-    @SerializedName("steps")
     private ArrayList<Step> steps;
-    @SerializedName("servings")
     private Integer servings;
-    @SerializedName("image")
     private String image;
+
+    public Recipe() {
+    }
 
     private Recipe(Parcel in) {
         if (in.readByte() == 0) {
@@ -51,24 +46,48 @@ public class Recipe implements Parcelable {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
 
+    public void setIngredients(ArrayList<Ingredient> ingredients) {
+        this.ingredients = ingredients;
+    }
+
     public ArrayList<Step> getSteps() {
         return steps;
+    }
+
+    public void setSteps(ArrayList<Step> steps) {
+        this.steps = steps;
     }
 
     public Integer getServings() {
         return servings;
     }
 
+    public void setServings(Integer servings) {
+        this.servings = servings;
+    }
+
     public String getImage() {
         return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @Override
