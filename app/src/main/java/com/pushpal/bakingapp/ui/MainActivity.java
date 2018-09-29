@@ -37,8 +37,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements RecipeClickListener {
-
-    public static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.toolbar)
     public Toolbar toolbar;
     @BindView(R.id.recipe_recycler_view)

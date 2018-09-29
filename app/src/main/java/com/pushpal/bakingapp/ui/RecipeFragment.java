@@ -301,6 +301,10 @@ public class RecipeFragment extends Fragment implements ExoPlayer.EventListener 
         this.position = position;
     }
 
+    public void setPlayerPosition(Long playerPosition) {
+        this.playerPosition = playerPosition;
+    }
+
     /**
      * Media Session Callbacks, where all external clients control the player.
      */
