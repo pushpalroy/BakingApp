@@ -23,6 +23,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
     private StepClickListener stepClickListener;
     private ArrayList<Ingredient> ingredients;
     private ArrayList<Step> steps;
+    private View lastItemView;
 
     public StepsAdapter(List<String> stepsList, ArrayList<Ingredient> ingredients,
                         ArrayList<Step> steps, StepClickListener stepClickListener) {
@@ -42,13 +43,17 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StepViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final StepViewHolder holder, final int position) {
         final String step = stepsList.get(position);
         holder.stepName.setText(step);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (lastItemView != null)
+                    lastItemView.setSelected(false);
                 stepClickListener.onStepClicked(position, ingredients, steps);
+                holder.itemView.setSelected(true);
+                lastItemView = holder.itemView;
             }
         });
     }
