@@ -14,6 +14,9 @@ import com.pushpal.bakingapp.adapter.StepsAdapter;
 
 public class MasterListFragment extends Fragment {
 
+    RecyclerView stepsRecyclerView;
+    int currentPosition = -1;
+
     public MasterListFragment() {
     }
 
@@ -22,16 +25,45 @@ public class MasterListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
 
         final View rootView = inflater.inflate(R.layout.fragment_master_list, container, false);
+        stepsRecyclerView = rootView.findViewById(R.id.rv_steps);
 
-        RecyclerView stepsRecyclerView = rootView.findViewById(R.id.rv_steps);
+        return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         StepsAdapter mAdapter = new StepsAdapter(((StepsActivity) getActivity()).getStepsList(),
                 ((StepsActivity) getActivity()).getIngredients(),
                 ((StepsActivity) getActivity()).getSteps(),
                 (StepsActivity) getActivity());
+        if (currentPosition != -1)
+            mAdapter.setStep(currentPosition);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         stepsRecyclerView.setLayoutManager(mLayoutManager);
         stepsRecyclerView.setAdapter(mAdapter);
+        if (currentPosition != -1)
+            stepsRecyclerView.scrollToPosition(currentPosition);
+    }
 
-        return rootView;
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Saving the current step number
+        currentPosition = ((StepsActivity) getActivity()).getStepPosition();
+        outState.putInt("step_position", currentPosition);
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            // Restoring the step number
+            if (savedInstanceState.containsKey("step_position")) {
+                currentPosition = savedInstanceState.getInt("step_position");
+            }
+        }
     }
 }

@@ -24,6 +24,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
     private ArrayList<Ingredient> ingredients;
     private ArrayList<Step> steps;
     private View lastItemView;
+    private int currentPosition = -1;
 
     public StepsAdapter(List<String> stepsList, ArrayList<Ingredient> ingredients,
                         ArrayList<Step> steps, StepClickListener stepClickListener) {
@@ -56,6 +57,12 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
                 lastItemView = holder.itemView;
             }
         });
+
+        if (currentPosition != -1 && currentPosition == position) {
+            holder.itemView.setSelected(true);
+            lastItemView = holder.itemView;
+            currentPosition = -1;
+        }
     }
 
     @Override
@@ -84,5 +91,9 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.StepViewHold
             // ButterKnife Binding
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public void setStep(int currentPosition) {
+        this.currentPosition = currentPosition;
     }
 }

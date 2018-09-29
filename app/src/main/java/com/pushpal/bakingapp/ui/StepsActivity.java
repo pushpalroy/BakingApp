@@ -192,6 +192,10 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
         RecipeWidgetProvider.updateWidget(StepsActivity.this, appWidgetManager, appWidgetIds);
     }
 
+    public int getStepPosition() {
+        return stepPosition;
+    }
+
     public List<String> getStepsList() {
         return mStepsList;
     }
