@@ -37,7 +37,6 @@ import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.pushpal.bakingapp.R;
 import com.pushpal.bakingapp.adapter.IngredientsAdapter;
-import com.pushpal.bakingapp.model.Ingredient;
 import com.pushpal.bakingapp.model.Step;
 
 import java.util.List;
@@ -49,7 +48,6 @@ public class RecipeFragment extends Fragment implements ExoPlayer.EventListener 
     SimpleExoPlayer mExoPlayer;
     TextView stepDescription;
     List<Step> steps = null;
-    List<Ingredient> ingredients = null;
     Step currentStep = null;
     int position = -1;
     RecyclerView mRecyclerView;
@@ -93,6 +91,8 @@ public class RecipeFragment extends Fragment implements ExoPlayer.EventListener 
         // Saving the current Exo Player position
         if (mExoPlayer != null)
             outState.putLong("player_position", mExoPlayer.getCurrentPosition());
+
+        ((StepsActivity) getActivity()).setPlayerPosition(playerPosition);
     }
 
     @Override

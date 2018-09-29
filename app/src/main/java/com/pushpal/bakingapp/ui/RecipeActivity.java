@@ -93,6 +93,7 @@ public class RecipeActivity extends AppCompatActivity implements ExoPlayer.Event
             steps = bundle.getParcelableArrayList("Step");
             ingredients = bundle.getParcelableArrayList("Ingredients");
             position = bundle.getInt("Position");
+            playerPosition = bundle.getLong("PlayerPosition");
         }
 
         setUpActionBar();

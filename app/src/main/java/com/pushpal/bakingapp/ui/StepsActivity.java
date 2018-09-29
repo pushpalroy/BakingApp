@@ -47,6 +47,7 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
     private ArrayList<Step> steps = null;
     private boolean isTwoPane = true;
     private int stepPosition;
+    private long playerPosition = -1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,11 +90,16 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
 
         // Saving the current step number
         outState.putInt("step_position", stepPosition);
+        outState.putLong("player_position", playerPosition);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState.containsKey("player_position")) {
+            playerPosition = savedInstanceState.getLong("player_position");
+        }
 
         // Restoring the step number
         if (savedInstanceState.containsKey("step_position")) {
@@ -113,6 +119,8 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
             bundle.putParcelableArrayList("Ingredients", ingredients);
             bundle.putParcelableArrayList("Step", steps);
             bundle.putInt("Position", (position - 1));
+            if (playerPosition != -1)
+                bundle.putLong("PlayerPosition", playerPosition);
             recipeIntent.putExtras(bundle);
             startActivity(recipeIntent);
         }
@@ -194,6 +202,10 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
 
     public int getStepPosition() {
         return stepPosition;
+    }
+
+    public void setPlayerPosition(long playerPosition) {
+        this.playerPosition = playerPosition;
     }
 
     public List<String> getStepsList() {
