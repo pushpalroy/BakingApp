@@ -46,6 +46,7 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
     private ArrayList<Ingredient> ingredients = null;
     private ArrayList<Step> steps = null;
     private boolean isTwoPane = true;
+    private int stepPosition;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,7 +84,29 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Saving the current step number
+        outState.putInt("step_position", stepPosition);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restoring the step number
+        if (savedInstanceState.containsKey("step_position")) {
+            stepPosition = savedInstanceState.getInt("step_position");
+            onStepClicked(stepPosition, ingredients, steps);
+        }
+    }
+
+    @Override
     public void onStepClicked(int position, ArrayList<Ingredient> ingredients, ArrayList<Step> steps) {
+        stepPosition = position;
+
+        // For phone screens
         if (!isTwoPane) {
             Intent recipeIntent = new Intent(StepsActivity.this, RecipeActivity.class);
             Bundle bundle = new Bundle();
@@ -92,7 +115,9 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
             bundle.putInt("Position", (position - 1));
             recipeIntent.putExtras(bundle);
             startActivity(recipeIntent);
-        } else {
+        }
+        // For tablet screens in landscape
+        else {
             setStepInFragment(steps, position);
         }
     }
