@@ -131,12 +131,6 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
     }
 
     private void setStepInFragment(ArrayList<Step> steps, int position) {
-        SharedPreferences sharedpreferences = getApplication().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        long playerPos = sharedpreferences.getLong("player_position", -1);
-        if (playerPos != -1)
-            playerPosition = playerPos;
-
-
         RecipeFragment recipeFragment = new RecipeFragment();
         recipeFragment.setSteps(steps);
         recipeFragment.setPosition(position - 1);

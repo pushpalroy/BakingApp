@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -54,8 +53,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-
-import static com.pushpal.bakingapp.utilities.Constants.MyPREFERENCES;
 
 public class RecipeActivity extends AppCompatActivity implements ExoPlayer.EventListener {
 
@@ -430,16 +427,5 @@ public class RecipeActivity extends AppCompatActivity implements ExoPlayer.Event
             } else
                 recipeThumbnail.setVisibility(View.GONE);
         }
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-
-        SharedPreferences sharedpreferences = getApplication().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putLong("player_position", playerPosition);
-        editor.apply();
-        finish();
     }
 }
