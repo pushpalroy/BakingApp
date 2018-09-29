@@ -428,4 +428,13 @@ public class RecipeActivity extends AppCompatActivity implements ExoPlayer.Event
                 recipeThumbnail.setVisibility(View.GONE);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra("step_position", position);
+        setResult(RESULT_OK, intent);
+        //finish();
+        super.onBackPressed();
+    }
 }

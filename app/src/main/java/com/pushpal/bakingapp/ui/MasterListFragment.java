@@ -37,6 +37,7 @@ public class MasterListFragment extends Fragment {
                 ((StepsActivity) getActivity()).getIngredients(),
                 ((StepsActivity) getActivity()).getSteps(),
                 (StepsActivity) getActivity());
+        currentPosition = ((StepsActivity) getActivity()).getStepPosition();
         if (currentPosition != -1)
             mAdapter.setStep(currentPosition);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());

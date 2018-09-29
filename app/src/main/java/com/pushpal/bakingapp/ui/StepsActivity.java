@@ -122,7 +122,7 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
             if (playerPosition != -1)
                 bundle.putLong("PlayerPosition", playerPosition);
             recipeIntent.putExtras(bundle);
-            startActivity(recipeIntent);
+            startActivityForResult(recipeIntent, 1);
         }
         // For tablet screens in landscape
         else {
@@ -200,6 +200,17 @@ public class StepsActivity extends AppCompatActivity implements StepClickListene
         int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(this, RecipeWidgetProvider.class));
         appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.list_view_ingredients);
         RecipeWidgetProvider.updateWidget(StepsActivity.this, appWidgetManager, appWidgetIds);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                stepPosition = data.getIntExtra("step_position", -1);
+                stepPosition++;
+            }
+        }
     }
 
     public int getStepPosition() {
