@@ -1,11 +1,11 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.pushpal.bakingapp"
         minSdkVersion 19
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -19,12 +19,12 @@ android {
 }
 
 ext {
-    supportLibVersion = '27.1.1'
+    supportLibVersion = '28.0.0'
     butterknifeVersion = '8.8.1'
     exoPlayerVersion = 'r2.2.0'
     roomVersion = '1.1.1'
     espressoVersion = '3.0.2'
-    glideVersion = '4.7.1'
+    glideVersion = '4.9.0'
     civVersion = '2.2.0'
 }
 
